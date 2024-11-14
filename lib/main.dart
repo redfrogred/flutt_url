@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 void main() {
   runApp(const MyApp());
@@ -38,6 +39,14 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  
+  Future<void> _launchUrl( String url  ) async {
+    final Uri _url = Uri.parse( url );
+    if (!await launchUrl(_url)) {
+      throw Exception('Could not launch $_url');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,9 +61,10 @@ class _MyHomePageState extends State<MyHomePage> {
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
               child: GestureDetector(
-                  onTap: () {
+                  onTap: () async {
                     _count++;
                     log('>> tapped link ${_count.toString()}x');
+                    _launchUrl( 'https://google.com' );
                   },
                   child: const Text('some link',
                       style: TextStyle(
@@ -78,7 +88,7 @@ class _MyHomePageState extends State<MyHomePage> {
         onPressed: _incrementCounter,
         tooltip: 'Increment',
         child: const Icon(Icons.add),
-      ), 
+      ),
     );
   }
 }
